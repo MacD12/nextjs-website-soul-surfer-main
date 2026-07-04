@@ -1,0 +1,25 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Use `npm install` (not `npm ci`) so the lock file is reconciled on the
+        # Linux build host — the strict `npm ci` sync check fails when platform-
+        # specific optional deps resolve to different versions than the machine
+        # that generated the lock. `--legacy-peer-deps` matches how the booking
+        # dependencies (react-datepicker / framer-motion / lucide-react, ported in
+        # for React 18) were installed locally, so peer-dependency resolution
+        # never blocks the build.
+        - npm install --legacy-peer-deps --cache .npm --prefer-offline
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    # Next.js SSR output. Amplify's Next.js compute build reads .next.
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*

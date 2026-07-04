@@ -22,6 +22,16 @@ const nextConfig = {
   // (ignoreBuildErrors). Match it so production builds pass; dev is unaffected.
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+
+  // SiteHeader/SiteFooter/SiteMain/PageSections read the ported HTML at runtime
+  // via fs.readFileSync(process.cwd() + "/data/..."). Next's output-file tracing
+  // does NOT follow dynamic-path reads, so on Amplify's serverless output the
+  // data/ folder would be missing and those pages would 500. Force-include it.
+  experimental: {
+    outputFileTracingIncludes: {
+      "/**": ["./data/**/*"],
+    },
+  },
 };
 
 export default nextConfig;

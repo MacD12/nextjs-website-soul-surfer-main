@@ -220,6 +220,39 @@
     width: 40px;
   }
 }
+/* Smallest phones (down to 320px): pull every control in a little more so the
+   full bar — logo + EN/DE + Book Now + burger — never crowds or clips. */
+@media (max-width: 400px) {
+  header *:has(> .ss-burger) {
+    gap: 5px !important;
+  }
+  .ss-lang {
+    margin: 0 1px !important;
+    gap: 4px !important;
+  }
+  .ss-lang-btn {
+    font-size: 12px !important;
+  }
+  .ss-booknow {
+    margin: 0 0 0 3px;
+    padding: 7px 11px;
+    font-size: 11.5px;
+  }
+  .ss-burger {
+    width: 38px;
+    padding: 9px;
+  }
+}
+/* Respect notch / rounded-corner safe areas on modern phones, so the burger and
+   Book Now never sit under the rounded screen edge in landscape. */
+@supports (padding: max(0px)) {
+  @media (max-width: 1024px) {
+    header .e-con-inner:has(.ss-logo) {
+      padding-left: max(16px, env(safe-area-inset-left)) !important;
+      padding-right: max(16px, env(safe-area-inset-right)) !important;
+    }
+  }
+}
 
 /* Burger morphs into an X while the panel is open */
 body.ss-mnav-active .ss-burger span:nth-child(1) {
@@ -253,7 +286,9 @@ body.ss-mnav-active .ss-burger span:nth-child(3) {
   height: 100%;
   width: min(84vw, 340px);
   box-sizing: border-box;
-  padding: 92px 28px 32px;
+  /* env() clears the notch on the right edge; falls back to 28px on phones
+     without a safe-area inset. */
+  padding: 92px max(28px, env(safe-area-inset-right)) 32px 28px;
   display: flex;
   flex-direction: column;
   background: var(--ss-cream, #ece8dd);

@@ -11,27 +11,32 @@ import { useEffect } from "react";
 // store each gallery's photos + current index in data attributes — which clone
 // fine. That makes the controls work on original and cloned slides alike.
 
+// Each gallery LEADS with clear bed shots, then shows the room's amenities /
+// bathroom. The source folders were bathroom-heavy (only 1 bed photo each for the
+// dorm and single room), so the strongest bed renders from soul_camp/ are pulled
+// in up front (dorm-bunk = a second bunk view, single-bed = the suite bed, double-
+// bed = the king suite) so a guest always sees the actual bed first.
 const GALLERIES: Record<string, string[]> = {
   "mixed dormitory": [
-    "/assets/rooms/dorm-1.jpg",
-    "/assets/rooms/dorm-2.jpg",
-    "/assets/rooms/dorm-3.jpg",
-    "/assets/rooms/dorm-4.jpg",
-    "/assets/rooms/dorm-5.jpg",
+    "/assets/rooms/dorm-1.jpg", // bunk beds
+    "/assets/rooms/dorm-bunk.jpg", // bunk beds (2nd view)
+    "/assets/rooms/dorm-2.jpg", // dressing area
+    "/assets/rooms/dorm-4.jpg", // ensuite bathroom
+    "/assets/rooms/dorm-5.jpg", // ensuite bathroom
   ],
   "private single room ensuite": [
-    "/assets/rooms/single-1.jpg",
-    "/assets/rooms/single-2.jpg",
-    "/assets/rooms/single-3.jpg",
-    "/assets/rooms/single-4.jpg",
-    "/assets/rooms/single-5.jpg",
+    "/assets/rooms/single-bed.jpg", // bed (clear hero)
+    "/assets/rooms/single-1.jpg", // bed + balcony
+    "/assets/rooms/single-2.jpg", // vanity
+    "/assets/rooms/single-3.jpg", // ensuite bathroom
+    "/assets/rooms/single-4.jpg", // ensuite bathroom
   ],
   "private double / twin room ensuite": [
-    "/assets/rooms/double-1.jpg",
-    "/assets/rooms/double-2.jpg",
-    "/assets/rooms/double-3.jpg",
-    "/assets/rooms/double-4.jpg",
-    "/assets/rooms/double-5.jpg",
+    "/assets/rooms/double-bed.jpg", // king bed (clear hero)
+    "/assets/rooms/double-1.jpg", // bed
+    "/assets/rooms/double-2.jpg", // bed
+    "/assets/rooms/double-3.jpg", // twin-bed layout
+    "/assets/rooms/double-4.jpg", // ensuite bathroom
   ],
 };
 

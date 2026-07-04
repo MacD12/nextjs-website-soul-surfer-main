@@ -52,6 +52,14 @@ export default function MobileNav() {
       setExpanded(false);
     }
 
+    // Mark the link for the page we're on, so the panel shows where you are.
+    // Plain <a> navigations do full page loads, so this is correct on every load.
+    const path = window.location.pathname.replace(/\/+$/, "") || "/";
+    const isActive = (href: string): boolean => {
+      const h = href.replace(/\/+$/, "") || "/";
+      return h === "/" ? path === "/" : path === h || path.startsWith(h + "/");
+    };
+
     // --- the slide-in panel: built once, lives on <body> ---
     let panel = document.querySelector("[data-ss-mnav]") as HTMLElement | null;
     if (!panel) {
@@ -62,11 +70,17 @@ export default function MobileNav() {
         '<div class="ss-mnav-backdrop" data-ss-mnav-close></div>' +
         '<nav class="ss-mnav-panel" aria-label="Mobile navigation">' +
         '<button type="button" class="ss-mnav-x" data-ss-mnav-close aria-label="Close menu">&times;</button>' +
+        '<span class="ss-mnav-eyebrow">Soul Surfer · Weligama</span>' +
         '<ul class="ss-mnav-list">' +
         LINKS.map(
-          (l) => `<li><a href="${l.href}" data-ss-mnav-link>${l.label}</a></li>`
+          (l, i) =>
+            `<li style="--i:${i}"><a href="${l.href}" data-ss-mnav-link${
+              isActive(l.href) ? ' class="is-active" aria-current="page"' : ""
+            }>${l.label}</a></li>`
         ).join("") +
         "</ul>" +
+        `<a class="ss-mnav-book" href="${BOOK_HREF}" data-ss-mnav-link>Book Now</a>` +
+        '<a class="ss-mnav-contact" href="/contact" data-ss-mnav-link>Contact the team →</a>' +
         "</nav>";
       document.body.appendChild(panel);
       panel.addEventListener("click", (event) => {

@@ -295,6 +295,9 @@ body.ss-mnav-active .ss-burger span:nth-child(3) {
   box-shadow: -14px 0 44px rgba(0, 0, 0, 0.25);
   transform: translateX(100%);
   transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Short landscape phones: let the panel scroll instead of clipping the CTA. */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 body.ss-mnav-active .ss-mnav {
   visibility: visible;
@@ -322,6 +325,17 @@ body.ss-mnav-active {
   color: var(--ss-espresso, #2b2722);
   cursor: pointer;
 }
+/* Small eyebrow above the links — a touch of brand in the panel. */
+.ss-mnav-eyebrow {
+  display: block;
+  margin-bottom: 14px;
+  font-family: "Onest", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ss-sage, #7e9a82);
+}
 .ss-mnav-list {
   list-style: none;
   margin: 0;
@@ -329,8 +343,23 @@ body.ss-mnav-active {
   display: flex;
   flex-direction: column;
 }
+.ss-mnav-list li {
+  /* Each link starts slightly offset + transparent; the reveal below slides them
+     in one after another when the panel opens (premium, unobtrusive). */
+  opacity: 0;
+  transform: translateX(18px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+body.ss-mnav-active .ss-mnav-list li {
+  opacity: 1;
+  transform: translateX(0);
+  /* stagger by index, after the panel itself has begun sliding in */
+  transition-delay: calc(0.12s + var(--i, 0) * 0.045s);
+}
 .ss-mnav-list a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 15px 4px;
   font-family: "Onest", sans-serif;
   font-size: 20px;
@@ -338,11 +367,18 @@ body.ss-mnav-active {
   color: var(--ss-espresso, #2b2722);
   text-decoration: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, padding-left 0.2s ease;
 }
 .ss-mnav-list a:hover,
 .ss-mnav-list a:focus {
   color: var(--ss-sage, #7e9a82);
+  padding-left: 8px;
+}
+/* Current page: sage accent bar + tinted label, so you always know where you are. */
+.ss-mnav-list a.is-active {
+  color: var(--ss-sage, #7e9a82);
+  box-shadow: inset 3px 0 0 var(--ss-sage, #7e9a82);
+  padding-left: 12px;
 }
 .ss-mnav-book {
   margin-top: auto;
@@ -356,6 +392,29 @@ body.ss-mnav-active {
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
+  box-shadow: 0 8px 20px rgba(43, 39, 34, 0.22);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.ss-mnav-book:hover,
+.ss-mnav-book:focus {
+  background: var(--ss-cocoa, #3a362e);
+  transform: translateY(-1px);
+}
+.ss-mnav-contact {
+  display: block;
+  margin-top: 14px;
+  text-align: center;
+  font-family: "Onest", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--ss-body, #6b6355);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.ss-mnav-contact:hover,
+.ss-mnav-contact:focus {
+  color: var(--ss-espresso, #2b2722);
 }
 
 /* ===== Per-room image gallery =====

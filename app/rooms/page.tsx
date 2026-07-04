@@ -19,7 +19,8 @@ const ROOMS = [
     name: "Mixed Dormitory",
     suits: "For solo travellers who want the social side of camp life.",
     capacity: "Up to 5 guests",
-    images: ["dorm-1", "dorm-2", "dorm-3", "dorm-4", "dorm-5"],
+    // Lead with the bed shots (bunks), then amenities — matches the home gallery.
+    images: ["dorm-1", "dorm-bunk", "dorm-2", "dorm-4", "dorm-5"],
     included: [
       "Boutique-style shared dorm with fresh linen made up for you",
       "Clean, hotel-style shared bathrooms",
@@ -32,7 +33,7 @@ const ROOMS = [
     name: "Private Single Room Ensuite",
     suits: "Your own private surf haven — for the solo surfer who wants to rest properly.",
     capacity: "1 guest",
-    images: ["single-1", "single-2", "single-3", "single-4", "single-5"],
+    images: ["single-bed", "single-1", "single-2", "single-3", "single-4"],
     included: [
       "Private boutique room with its own ensuite bathroom",
       "Air-conditioning and reliable Wi-Fi throughout the camp",
@@ -45,7 +46,7 @@ const ROOMS = [
     name: "Private Double / Twin Room Ensuite",
     suits: "For couples, or friends travelling together who want privacy with style.",
     capacity: "2 guests",
-    images: ["double-1", "double-2", "double-3", "double-4", "double-5"],
+    images: ["double-bed", "double-1", "double-2", "double-3", "double-4"],
     included: [
       "Private ensuite room set up as a double or a twin",
       "Air-conditioning and reliable Wi-Fi throughout the camp",

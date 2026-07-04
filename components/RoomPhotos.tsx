@@ -66,12 +66,14 @@ export default function RoomPhotos({
         </div>
       </div>
 
-      {/* Thumbnail row — every other photo, clickable. Columns scale to the
-          number of thumbnails so 2-photo and 5-photo rooms both read as a tidy
-          single row (wraps on very narrow screens). */}
+      {/* Thumbnail row — every other photo, clickable. On phones this is a
+          horizontal-scroll strip of fixed-width 4:3 thumbnails (so four thumbs on
+          a 320px screen stay a natural landscape shape instead of squashing into
+          narrow vertical slivers); from `sm` up it becomes an even grid that fills
+          the column. Every thumbnail keeps a 4:3 ratio so nothing is stretched. */}
       {thumbs.length > 0 ? (
         <div
-          className="grid gap-3"
+          className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:overflow-visible sm:px-0 sm:pb-0"
           style={{
             gridTemplateColumns: `repeat(${thumbs.length}, minmax(0, 1fr))`,
           }}
@@ -82,7 +84,7 @@ export default function RoomPhotos({
               type="button"
               onClick={() => setActive(i)}
               aria-label={`View photo ${i + 1}`}
-              className="group block appearance-none overflow-hidden !rounded-[12px] !border-0 !bg-transparent !p-0 shadow-sm"
+              className="group block w-[84px] shrink-0 appearance-none overflow-hidden !rounded-[12px] !border-0 !bg-transparent !p-0 shadow-sm sm:w-auto"
             >
               <img
                 src={src(images[i])}
@@ -90,7 +92,7 @@ export default function RoomPhotos({
                 loading="lazy"
                 width={400}
                 height={300}
-                className="h-[110px] w-full object-cover transition-transform duration-500 group-hover:scale-105 sm:h-[120px]"
+                className="aspect-[4/3] w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
               />
             </button>
           ))}

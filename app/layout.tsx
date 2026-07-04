@@ -23,9 +23,6 @@ import {
   DEFAULT_OG_IMAGE,
 } from "../lib/seo";
 
-const FAVICON =
-  "/assets/www.beyondsenses.de/wp-content/uploads/2025/10/favicon-icon.png";
-
 // Site-wide metadata baseline. Individual routes override title/description and
 // their canonical + Open Graph/Twitter cards via buildMetadata() (lib/seo.ts);
 // anything a route does not set falls back to these values.
@@ -55,7 +52,9 @@ export const metadata: Metadata = {
   // copy and clash with the design; the contact page still uses explicit tel:/
   // mailto: links, which are unaffected.
   formatDetection: { telephone: false },
-  icons: { icon: FAVICON, apple: FAVICON },
+  // No site favicon — an empty icons list stops Next.js from emitting any
+  // <link rel="icon"> tags, so the browser tab shows its default blank icon.
+  icons: { icon: [], apple: [] },
   openGraph: {
     type: "website",
     title: SITE_TITLE,

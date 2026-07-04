@@ -1,0 +1,973 @@
+/* Tailwind CSS. Preflight is disabled in tailwind.config.ts, so `base` emits no
+   reset — only the @layer scaffolding — keeping the Elementor design intact while
+   making Tailwind's component/utility classes available across the app. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App-level overrides layered on top of the ported Elementor stylesheet.
+   Kept intentionally small so the original design is untouched. */
+
+/* Hidden per request: the entire "Here's what our guests say" reviews section
+   (the testimonial image + quote + Google-reviews widget). Kept in the markup
+   so it's easy to bring back — just delete this rule to un-hide it. */
+.elementor-element-5c5c740 {
+  display: none !important;
+}
+
+/* Clean nav: the desktop menu items (Explore/Activities/Rooms/Blogs) still carry
+   the original site's dead mega-menu dropdowns. The kit hides the panels, but the
+   menu JS re-opens them on hover — flashing a dark strip + a triangle pointer
+   below the bar. Collapse the panels by every means (JS-set inline display can
+   beat a plain display:none) and remove any pointer pseudo-element. This only
+   touches the dropdown content, never the visible nav links. */
+.elementor-element-9807f32 .e-n-menu-content {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  max-height: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.elementor-element-9807f32 .e-n-menu-content::before,
+.elementor-element-9807f32 .e-n-menu-content::after,
+.elementor-element-9807f32 .e-n-menu-item::before,
+.elementor-element-9807f32 .e-n-menu-item::after,
+.elementor-element-9807f32 .e-n-menu-title::before,
+.elementor-element-9807f32 .e-n-menu-wrapper::before,
+.elementor-element-9807f32 .e-n-menu-wrapper::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* ===== Mobile navigation (custom, reliable) =====
+   The ported Elementor menu is desktop-only and its responsive hamburger is
+   broken, so we ship our own burger + slide-in panel for <=1024px (exactly where
+   the desktop menu is hidden). The desktop nav above 1024px is untouched. */
+
+.ss-burger {
+  /* Hidden on desktop. !important beats Elementor's header <button> styling,
+     which otherwise leaked the burger onto desktop as a dark pill. */
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  margin: 0 4px;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  color: #fff;
+  z-index: 1001;
+}
+.ss-burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor; /* white, matches the nav text over the hero */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.28s ease, opacity 0.2s ease;
+}
+@media (max-width: 1024px) {
+  .ss-burger {
+    display: inline-flex !important;
+  }
+}
+/* ===== Mobile / tablet header cleanup (<=1024px) =====
+   The ported Elementor header carries a SECOND, dead mobile menu: two desktop-
+   hidden icon widgets (one opens an empty popup) that render as a stray ☰ near
+   the logo — a duplicate of our burger. It also stretches the EN/DE toggle into
+   Elementor "button" pills and keeps an inline Book Now that crowds the bar.
+   On <=1024px we strip all of that to a clean bar: logo + compact EN/DE + burger.
+   (Book Now lives in the slide-in panel.) */
+@media (max-width: 1024px) {
+  /* dead duplicate hamburger / empty-popup triggers */
+  header .elementor-element-991e1d5,
+  header .elementor-element-d6a281d {
+    display: none !important;
+  }
+  /* inline Book Now — it's the full-width button inside the slide-in panel */
+  header .elementor-element-813d41d {
+    display: none !important;
+  }
+  /* EN/DE: strip the stray button pill, keep a small clean text toggle */
+  .ss-lang {
+    margin: 0 4px !important;
+    gap: 6px !important;
+    background: transparent !important;
+  }
+  .ss-lang-btn {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ===== Mobile header ROW layout (<=1024px) =====
+   The EN/DE toggle, Book Now pill and burger are injected as siblings into the
+   header's action area. Without an explicit layout the burger wrapped onto a
+   second line under Book Now and the logo sat higher than the controls. These
+   rules force a single, vertically-centred row. `:has()` targets the containers
+   by content (the burger / the logo) so it works regardless of Elementor's
+   generated element IDs and across both the header and its sticky clone. */
+@media (max-width: 1024px) {
+  /* The header's inner row: logo on the left, controls on the right, centred. */
+  header .e-con-inner:has(.ss-logo) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  /* The menu-wrapper that holds the controls: shrink to content and centre it,
+     so it hugs the right edge instead of stretching and pushing items to wrap. */
+  header .e-con-inner:has(.ss-logo) > .menu-wrapper {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+  /* The immediate container of the injected controls — one nowrap, centred row. */
+  header *:has(> .ss-burger) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    width: auto !important;
+  }
+  /* Give every control the same height and vertical centring so nothing floats.
+     Zero their own margins so the row's `gap` is the single source of spacing. */
+  .ss-lang,
+  .ss-booknow,
+  .ss-burger {
+    align-self: center !important;
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* ===== Visible "Book Now" pill in the mobile nav bar =====
+   Injected by MobileNav next to the burger (not inside the slide-in panel). It
+   mirrors the burger's show/hide: hidden on desktop (where the Elementor Book
+   Now shows), a compact espresso pill on <=1024px. Palette-matched so it reads
+   as the site's primary CTA. !important beats Elementor's leaked <a>/button
+   styling on the ported header. */
+.ss-booknow {
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px 0 6px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--ss-espresso) !important;
+  color: #fff !important;
+  font-family: "Onest", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  z-index: 1001;
+}
+.ss-booknow:hover,
+.ss-booknow:focus {
+  background: var(--ss-cocoa) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+@media (max-width: 1024px) {
+  .ss-booknow {
+    display: inline-flex !important;
+  }
+}
+/* Tighten spacing so logo + EN/DE + Book Now + burger all fit on small phones. */
+@media (max-width: 560px) {
+  .ss-booknow {
+    margin: 0 0 0 4px;
+    padding: 8px 13px;
+    font-size: 12px;
+  }
+  .ss-burger {
+    margin: 0 !important;
+    width: 40px;
+  }
+}
+
+/* Burger morphs into an X while the panel is open */
+body.ss-mnav-active .ss-burger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+body.ss-mnav-active .ss-burger span:nth-child(2) {
+  opacity: 0;
+}
+body.ss-mnav-active .ss-burger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.ss-mnav {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  visibility: hidden;
+  pointer-events: none;
+}
+.ss-mnav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 18, 15, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.ss-mnav-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(84vw, 340px);
+  box-sizing: border-box;
+  padding: 92px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  background: var(--ss-cream, #ece8dd);
+  box-shadow: -14px 0 44px rgba(0, 0, 0, 0.25);
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+body.ss-mnav-active .ss-mnav {
+  visibility: visible;
+  pointer-events: auto;
+}
+body.ss-mnav-active .ss-mnav-backdrop {
+  opacity: 1;
+}
+body.ss-mnav-active .ss-mnav-panel {
+  transform: translateX(0);
+}
+body.ss-mnav-active {
+  overflow: hidden;
+}
+.ss-mnav-x {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  color: var(--ss-espresso, #2b2722);
+  cursor: pointer;
+}
+.ss-mnav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ss-mnav-list a {
+  display: block;
+  padding: 15px 4px;
+  font-family: "Onest", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ss-espresso, #2b2722);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transition: color 0.2s ease;
+}
+.ss-mnav-list a:hover,
+.ss-mnav-list a:focus {
+  color: var(--ss-sage, #7e9a82);
+}
+.ss-mnav-book {
+  margin-top: auto;
+  display: block;
+  text-align: center;
+  padding: 15px 20px;
+  border-radius: 999px;
+  background: var(--ss-espresso, #2b2722);
+  color: #fff;
+  font-family: "Onest", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ===== Per-room image gallery =====
+   Turns each Featured Rooms card's single image into a click-through gallery
+   (arrows + dots). Fills the card's absolutely-positioned image widget. Dots sit
+   bottom-right so they clear the "New" badge at bottom-left. */
+.ss-gal {
+  /* In-flow (relative), so the absolutely-positioned image widget keeps its
+     height instead of collapsing to 0. Also the positioning context for the
+     arrows/dots. */
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+}
+.ss-gal-img {
+  width: 100%;
+  /* The room photos are mostly 4:3 — the old 437x250 (1.75) box cropped the top
+     and bottom, cutting the beds off. A 4:3 box shows the full landscape room
+     shots (beds included); the few non-4:3 photos crop from the centre. */
+  aspect-ratio: 4 / 3;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+/* Glassmorphism gallery controls — a frosted-glass "unique touch". The kit's
+   button styling would otherwise add a red outline + pill background, so every
+   visual property is forced with !important. Arrows: blurred translucent glass
+   circles with an inner highlight; dots: tiny glass pills that glow when active. */
+.ss-gal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28) !important;
+  color: var(--ss-espresso) !important;
+  font-size: 22px !important;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  z-index: 4;
+}
+.ss-gal:hover .ss-gal-nav {
+  opacity: 1;
+}
+.ss-gal-nav:hover {
+  background: var(--ss-cream) !important;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.32) !important;
+}
+.ss-gal-nav:active {
+  transform: translateY(-50%) scale(0.96);
+}
+.ss-gal-prev {
+  left: 12px;
+}
+.ss-gal-next {
+  right: 12px;
+}
+.ss-gal-dots {
+  position: absolute;
+  bottom: 13px;
+  right: 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(20, 18, 15, 0.18);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  backdrop-filter: blur(8px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 4;
+}
+.ss-gal-dot {
+  width: 8px !important;
+  height: 8px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.ss-gal-dot.is-active {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85) !important;
+  transform: scale(1.35);
+}
+
+/* On-brand text selection — the browser default (harsh blue) clashed with the
+   palette and read like a rendering glitch on the dark CTA banner. Sage highlight
+   with white text, legible on both light and dark sections. */
+::selection {
+  background-color: var(--ss-sage);
+  color: #ffffff;
+}
+::-moz-selection {
+  background-color: var(--ss-sage);
+  color: #ffffff;
+}
+
+/* Footer brand block: the "about" paragraph shipped locked to a cramped 500px,
+   sitting vertically-centred beside the logo with a wide 50px gap — so it read as
+   a narrow, floating 4-line column. Align the logo to the TOP of the text, widen
+   the paragraph to a cleaner measure, and tighten the gap so it reads as one tidy
+   unit. (Mobile still stacks via Elementor's flex-wrap.) */
+.elementor-element-fd39073 {
+  --align-items: flex-start !important;
+  align-items: flex-start !important;
+  --gap: 34px 34px !important;
+  gap: 34px !important;
+}
+/* Slim the footer's side margins: both the brand row and the nav-columns row
+   shipped with 100px left/right padding. Reduce both together (so they stay
+   aligned) to give the content more width. */
+.elementor-element-2948b41,
+.elementor-element-24ca75d {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+.footer-text {
+  max-width: 820px !important;
+  width: auto !important;
+}
+.footer-text p {
+  line-height: 1.7;
+}
+
+/* Section sub-headers: a supporting line that sits directly under a section
+   title (e.g. the Featured Surf Packages / Featured Rooms carousels). Muted body
+   colour, left-aligned under the H2, with comfortable measure. */
+.ss-subhead {
+  font-family: "Onest", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--ss-body);
+  margin: 6px 0 0;
+  max-width: 620px;
+}
+
+/* Hero contact row: put email + address on the LEFT and the "Created by The
+   Surfer Surf Camps franchise" credit on the RIGHT, all on one line. The credit
+   widget sits first in the DOM, so `order` pushes it to the right edge. Wraps to
+   stacked on narrow screens. */
+.elementor-element-3531dfa > .e-con-inner {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+}
+.elementor-element-3531dfa > .e-con-inner .ss-hero-credit-widget {
+  order: 2;
+}
+
+/* Removed per request: the "Meet the team" button in the home page's 2nd (About)
+   section — leaving just the "About the camp" button. */
+.elementor-element-5f522f8 {
+  display: none !important;
+}
+
+/* ===== Boat Party video band =====
+   Replaces the island background image in section b668f42 with a YouTube embed,
+   keeping that section's EXACT box (full-width × 650px). The iframe is scaled to
+   COVER the band (16:9 sized to the full viewport width, then centred) so there
+   are no black bars, and the original background photo is removed. */
+.elementor-element-b668f42 {
+  background-image: none !important;
+  background-color: #0a0f14 !important; /* dark fallback while the video loads */
+  overflow: hidden;
+}
+.ss-video-band {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+.ss-video-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 56.25vw; /* 16:9 of the full width → taller than the 650px box = covers */
+  min-height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ===== Activities section (custom, built to match the site's card language) =====
+   Left-aligned title + sub-header with a "View all" pill on the right (like the
+   carousels), then a responsive grid of white rounded cards with a photo, a title
+   and an "Explore" link. Uses the palette tokens + Onest, taupe band so it slots
+   into the cream/taupe rhythm. */
+.ss-section.ss-activities {
+  background-color: var(--ss-taupe) !important;
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
+/* Match the width of the site's boxed Elementor sections (--container-max-width
+   1400px) so the left/right edges line up with Rooms/Packages above. */
+.ss-section.ss-activities .ss-inner {
+  max-width: 1400px;
+}
+.ss-act-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 32px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.ss-act-intro {
+  max-width: 660px;
+}
+.ss-act-h2 {
+  font-family: "Onest", sans-serif;
+  font-weight: 600;
+  font-size: clamp(26px, 3.6vw, 38px);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: var(--ss-espresso);
+  margin: 0;
+}
+.ss-act-viewall {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: var(--ss-espresso) !important;
+  /* !important: a global link colour was overriding this, leaving the label
+     dark-on-dark (invisible). */
+  color: #ffffff !important;
+  font-family: "Onest", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.ss-act-viewall:hover {
+  background: #1f1c17 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+.ss-act-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.ss-act-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ss-white);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.ss-act-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.13);
+}
+.ss-act-media {
+  height: 190px;
+  overflow: hidden;
+}
+.ss-act-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.ss-act-card:hover .ss-act-media img {
+  transform: scale(1.06);
+}
+.ss-act-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 20px 22px;
+  flex: 1;
+}
+.ss-act-title {
+  font-family: "Onest", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ss-espresso);
+  margin: 0;
+}
+.ss-act-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Onest", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ss-sage);
+  text-decoration: none;
+  transition: gap 0.25s ease, color 0.25s ease;
+}
+.ss-act-link span {
+  transition: transform 0.25s ease;
+}
+.ss-act-link:hover {
+  color: var(--ss-espresso);
+}
+.ss-act-link:hover span {
+  transform: translateX(4px);
+}
+@media (max-width: 1024px) {
+  .ss-act-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .ss-act-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FAQ section background → taupe (#D7D2C4) per request. Scoped to .ss-faq, which
+   exists only on the homepage (the /faq page uses .ss-inner without this wrapper),
+   so /faq is unaffected. Higher specificity + !important beats the .ss-section
+   default (#fff). */
+.ss-section.ss-faq {
+  background-color: var(--ss-taupe) !important;
+}
+
+/* Hidden per request: "Surf Packages & Weekly Rates" on the HOME page only.
+   This `.ss-rates` wrapper exists solely on the homepage; the dedicated /rates
+   page renders the table without it, so /rates is unaffected. Delete to restore. */
+.ss-rates {
+  display: none !important;
+}
+
+/* Remove the placeholder "View all" buttons (dead links to "#") — Featured
+   Surf Packages (c040ac2 / 6277386) and the reviews section (8b4fbf9). */
+.elementor-element-c040ac2,
+.elementor-element-6277386,
+.elementor-element-8b4fbf9 {
+  display: none !important;
+}
+
+/* Smooth in-page navigation for the header anchor menu. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== Click-to-load embed facades (video + maps) =====
+   Rendered by components/EmbedFacade.tsx. Replaces the heavy auto-loading
+   YouTube video and Google Maps iframes with a lightweight poster/placeholder
+   that only loads the real embed on click — killing the embeds' console noise
+   and their weight from first paint. */
+.ss-embed-facade {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: var(--ss-espresso);
+  background-size: cover;
+  background-position: center;
+}
+/* Video: fills the .ss-video-band background layer; dark scrim for the button. */
+.ss-embed-facade--video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+.ss-embed-facade--video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease;
+}
+.ss-embed-facade--video:hover::after {
+  background: rgba(0, 0, 0, 0.18);
+}
+/* Map: a calm cream placeholder the height of the original map. */
+.ss-embed-facade--map {
+  height: 300px;
+  background-color: var(--ss-cream);
+}
+.ss-embed-play {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  cursor: pointer;
+  font-family: "Onest", sans-serif;
+  font-weight: 600;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+.ss-embed-facade--video .ss-embed-play {
+  width: 76px;
+  height: 76px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.ss-embed-facade--video .ss-embed-play svg {
+  width: 30px;
+  height: 30px;
+  margin-left: 4px; /* optically centre the triangle */
+  fill: var(--ss-espresso);
+}
+.ss-embed-facade--video:hover .ss-embed-play {
+  transform: scale(1.08);
+  background: #fff;
+}
+.ss-embed-facade--map .ss-embed-play {
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--ss-espresso);
+  color: #fff;
+  font-size: 14px;
+}
+.ss-embed-facade--map .ss-embed-play svg {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+}
+.ss-embed-facade--map:hover .ss-embed-play {
+  transform: translateY(-1px);
+  background: var(--ss-cocoa);
+}
+.ss-embed-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.ss-embed-loaded {
+  cursor: default;
+  background: none;
+}
+.ss-embed-loaded::after {
+  display: none;
+}
+
+/* Featured Rooms / Surf Packages carousels are run by Elementor's native Swiper
+   (arrows + autoplay). Just make the arrows sit above the slides and give a
+   little hover feedback — Swiper handles the rest (enabled/disabled state,
+   responsive slide widths, looping). */
+.elementor-swiper-button {
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 0.2s ease;
+}
+.elementor-swiper-button:hover {
+  transform: scale(1.06);
+}
+
+/* ===== Mobile responsive fixes ===== */
+
+/* Kill horizontal scroll on phones/tablets. Scoped to <=1024px so it can never
+   interfere with the desktop sticky header (which is position:fixed anyway). */
+@media (max-width: 1024px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* About section image column (02e6592) → the Soul Surfer camp photo, replacing
+   the ported beyondsenses Maldives stock background. !important beats the
+   app.css background-image rule. */
+.elementor-element-02e6592,
+.elementor-element-02e6592 .elementor-motion-effects-layer {
+  background-image: url("/soul_camp/1.jpg") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Anchor targets clear the sticky header (matches SectionAnchors.js). */
+:target {
+  scroll-margin-top: 110px;
+}
+
+/* ---- EN/DE language toggle (injected into the header by LanguageSwitcher) ---- */
+/* Typography matched 1:1 to the nav menu items (.e-n-menu-title-text):
+   Onest 500, 13px, UPPERCASE, 1px tracking, white → sage (#7E9A82) when active —
+   so EN/DE reads as just another nav link, not a separate control. */
+.ss-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 12px;
+  font-family: "Onest", sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.ss-lang-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.ss-lang-btn:hover {
+  opacity: 1;
+  color: #7e9a82;
+}
+
+.ss-lang-btn:focus-visible {
+  outline: none;
+  opacity: 1;
+  color: #7e9a82;
+}
+
+.ss-lang-btn.is-active {
+  opacity: 1;
+  color: #7e9a82; /* mint — mirrors the nav's active link colour */
+}
+
+.ss-lang-sep {
+  width: 1px;
+  height: 10px;
+  background: #fff;
+  opacity: 0.3;
+}
+
+/* Fallback placement if no header is found at runtime. */
+.ss-lang--float {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100000;
+  margin: 0;
+  padding: 7px 12px;
+  background: rgba(15, 23, 22, 0.45);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Sub-page title band (PageHero) ----
+   Explicit values + !important so the ported app.css heading rules can't
+   recolour the <h1> (it would otherwise be espresso-on-espresso = invisible) or
+   add large heading margins (which created the big vertical gap). Top padding
+   clears the transparent/sticky header that overlays it. */
+.ss-hero {
+  background-color: var(--ss-espresso);
+  text-align: center;
+}
+
+.ss-hero__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 128px 24px 56px;
+}
+
+.ss-hero__eyebrow {
+  margin: 0 0 14px !important;
+  padding: 0;
+  font-family: "Onest", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ss-sage) !important;
+}
+
+.ss-hero__title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: "Onest", sans-serif;
+  font-weight: 600;
+  font-size: clamp(30px, 4.4vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: #ffffff !important;
+}
+
+.ss-hero__subtitle {
+  margin: 18px auto 0 !important;
+  padding: 0;
+  max-width: 600px;
+  font-family: "Onest", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+@media (max-width: 767px) {
+  .ss-hero__inner {
+    padding: 104px 20px 44px;
+  }
+}

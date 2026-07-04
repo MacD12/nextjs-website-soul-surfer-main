@@ -1,0 +1,161 @@
+/* =====================================================================
+   Ported booking engine — base reset + theming.
+
+   The booking flow was ported from a Tailwind v4 app into this Tailwind v3 site,
+   which runs with Preflight (Tailwind's global reset) OFF to protect the ported
+   Elementor marketing design. These rules re-supply — SCOPED to `.ss-booking`
+   (the wrapper on every booking page) — the parts of Preflight the booking
+   components rely on, plus the --ss-c* gradient variables and the react-datepicker
+   theme, all in the Soul Surfer palette. Nothing here leaks onto the marketing
+   pages.
+
+   IMPORTANT: every element-level reset is wrapped in `:where(.ss-booking)` so it
+   carries ZERO specificity from the wrapper — exactly like Tailwind Preflight.
+   Without this, `.ss-booking img { height:auto }` (specificity 0,1,1) would beat
+   Tailwind utilities like `.h-11` (0,1,0) and break sizes/backgrounds/margins
+   (e.g. the navbar logo rendering at full natural size).
+   ===================================================================== */
+
+:root {
+  --ss-c1: #2b2722; /* espresso — booking gradient / accent 1 */
+  --ss-c2: #7e9a82; /* sage */
+  --ss-c3: #3a362e; /* cocoa */
+  --ss-c4: #ece8dd; /* cream */
+}
+
+/* Box-sizing + border defaults (so `border` utilities show) at zero specificity. */
+:where(.ss-booking),
+:where(.ss-booking) *,
+:where(.ss-booking) *::before,
+:where(.ss-booking) *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+/* Base typography + background for the scope (the Elementor body background is
+   removed on booking routes, so supply a warm neutral base here). */
+.ss-booking {
+  min-height: 100vh;
+  background-color: #efeae0;
+  font-family: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Neutralise the Elementor generic `button { border: 1px solid #c36 }` bleed —
+   booking buttons use rings, not borders, so a transparent border is safe. */
+.ss-booking button {
+  border-color: transparent;
+}
+
+/* Reset margins/lists/media — all via :where() so utilities override them. */
+:where(.ss-booking) h1,
+:where(.ss-booking) h2,
+:where(.ss-booking) h3,
+:where(.ss-booking) h4,
+:where(.ss-booking) h5,
+:where(.ss-booking) h6,
+:where(.ss-booking) p,
+:where(.ss-booking) figure,
+:where(.ss-booking) blockquote,
+:where(.ss-booking) dl,
+:where(.ss-booking) dd {
+  margin: 0;
+}
+:where(.ss-booking) ul,
+:where(.ss-booking) ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+:where(.ss-booking) button {
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+:where(.ss-booking) a {
+  color: inherit;
+  text-decoration: inherit;
+}
+:where(.ss-booking) img,
+:where(.ss-booking) svg,
+:where(.ss-booking) video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+:where(.ss-booking) input,
+:where(.ss-booking) select,
+:where(.ss-booking) textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* react-datepicker — recolour to the Soul Surfer palette (sage / espresso). */
+.ss-booking .react-datepicker {
+  font-family: inherit;
+  border-color: #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ss-booking .react-datepicker__header {
+  background: var(--ss-c4);
+  border-bottom-color: #e5e7eb;
+}
+.ss-booking .react-datepicker__day--selected,
+.ss-booking .react-datepicker__day--in-selecting-range,
+.ss-booking .react-datepicker__day--in-range {
+  background: var(--ss-c2) !important;
+  color: #fff !important;
+}
+.ss-booking .react-datepicker__day--keyboard-selected {
+  background: var(--ss-c1) !important;
+  color: #fff !important;
+}
+.ss-booking .react-datepicker__day:hover {
+  background: var(--ss-c4);
+}
+
+/* =====================================================================
+   Robust colour fallbacks. The booking is themed with `cyan-*` utilities that
+   we remap to the Soul Surfer palette in tailwind.config.js — but that config
+   change only applies after a dev-server restart, and newly-introduced classes
+   need a rebuild. To guarantee the colours render regardless, we define the
+   mapped `cyan-*` classes directly here, scoped to `.ss-booking`. Specificity
+   `.ss-booking .x` (0,1,1) sits just above Tailwind's own utilities (0,1,0), so
+   these win. Palette: 700=#2b2722 espresso · 600=#5f7a63 · 500=#7e9a82 sage ·
+   400=#9aad9d · 300=#b9bca7 · 200=#d7d2c4 taupe · 100=#ece8dd cream · 50=#f4f2ec
+   ===================================================================== */
+.ss-booking .bg-cyan-50 { background-color: #f4f2ec; }
+.ss-booking .bg-cyan-100 { background-color: #ece8dd; }
+.ss-booking .bg-cyan-200 { background-color: #d7d2c4; }
+.ss-booking .bg-cyan-400 { background-color: #9aad9d; }
+.ss-booking .bg-cyan-500 { background-color: #7e9a82; }
+.ss-booking .bg-cyan-600 { background-color: #5f7a63; }
+.ss-booking .bg-cyan-700 { background-color: #2b2722; }
+
+.ss-booking .text-cyan-300 { color: #b9bca7; }
+.ss-booking .text-cyan-400 { color: #9aad9d; }
+.ss-booking .text-cyan-500 { color: #7e9a82; }
+.ss-booking .text-cyan-600 { color: #5f7a63; }
+.ss-booking .text-cyan-700 { color: #2b2722; }
+
+.ss-booking .ring-cyan-100 { --tw-ring-color: #ece8dd; }
+.ss-booking .ring-cyan-200 { --tw-ring-color: #d7d2c4; }
+.ss-booking .ring-cyan-300 { --tw-ring-color: #b9bca7; }
+
+.ss-booking .border-cyan-100 { border-color: #ece8dd; }
+.ss-booking .border-cyan-200 { border-color: #d7d2c4; }
+.ss-booking .border-cyan-300 { border-color: #b9bca7; }
+
+/* Gradient combos used across the booking — set background-image directly so
+   they render without relying on Tailwind's --tw-gradient-* var machinery. */
+.ss-booking .bg-gradient-to-br.from-cyan-700.to-cyan-500 { background-image: linear-gradient(to bottom right, #2b2722, #7e9a82); }
+.ss-booking .bg-gradient-to-r.from-cyan-700.to-cyan-500 { background-image: linear-gradient(to right, #2b2722, #7e9a82); }
+.ss-booking .bg-gradient-to-r.from-cyan-700.via-cyan-500.to-cyan-400 { background-image: linear-gradient(to right, #2b2722, #7e9a82, #9aad9d); }
+.ss-booking .bg-gradient-to-r.from-cyan-500.to-cyan-300 { background-image: linear-gradient(to right, #7e9a82, #b9bca7); }
+.ss-booking .bg-gradient-to-br.from-cyan-500.to-cyan-300 { background-image: linear-gradient(to bottom right, #7e9a82, #b9bca7); }

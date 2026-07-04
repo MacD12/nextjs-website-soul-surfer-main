@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',function(){const videos=document.querySelectorAll('#hero-video video, #hero-video-pages video');videos.forEach(function(video){video.addEventListener('loadeddata',function(){video.classList.add('pmloaded')});if(video.readyState>=3){video.classList.add('pmloaded')}})})

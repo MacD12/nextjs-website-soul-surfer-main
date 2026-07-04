@@ -1,0 +1,180 @@
+/* =====================================================================
+   Soul Surfer colour palette — extracted from the reference design.
+   ONLY these colours are used. The bright mint #BEF6D1 is intentionally
+   eliminated — it is not a reference colour.
+
+     #D7D2C4  taupe     — "Rooms" section background
+     #ECE8DD  cream     — light section backgrounds
+     #FFFFFF  white     — cards & form surfaces
+     #2B2722  espresso  — buttons, dark panels, headings
+     #3A362E  cocoa     — slightly lighter dark (inner dark panels)
+     #7E9A82  sage      — small green accents & eyebrow labels
+     #6E6A61  body grey — paragraph text
+
+   The site is built on Elementor "global colours". Re-pointing those
+   variables to the reference hexes recolours every element in its correct
+   role. The `body` selector raises specificity so these win over the kit
+   defaults regardless of stylesheet order.
+   ===================================================================== */
+
+:root {
+  --ss-taupe: #d7d2c4;
+  --ss-cream: #ece8dd;
+  --ss-white: #ffffff;
+  --ss-espresso: #2b2722;
+  --ss-cocoa: #3a362e;
+  --ss-sage: #7e9a82;
+  --ss-body: #6e6a61;
+}
+
+body.elementor-kit-6 {
+  /* Dark — headings, body copy, buttons, dark UI */
+  --e-global-color-primary: #2b2722;
+  --e-global-color-text: #2b2722;
+  --e-global-color-accent: #3a362e;
+  --e-global-color-5429229: #3a362e;
+  --e-global-color-8ffa3ca: #3a362e;
+
+  /* Light cream — section backgrounds */
+  --e-global-color-secondary: #ece8dd;
+
+  /* Warm body grey */
+  --e-global-color-97c4e74: #6e6a61;
+
+  /* Greens — the bright mint #BEF6D1 is replaced with the reference sage.
+     a49552b was used only as a (mint) section background → now cream;
+     98f0224 is the green accent used for labels/badges → now sage. */
+  --e-global-color-98f0224: #7e9a82;
+  --e-global-color-a49552b: #ece8dd;
+
+  /* Neutrals — white surfaces & hairlines (match the reference) */
+  --e-global-color-c18bdb2: #ffffff;
+  --e-global-color-c27e12c: #e6e6e6;
+  --e-global-color-ff14445: #c9c9ca;
+}
+
+/* Page base = exact reference taupe (the import shipped a near-identical
+   #d5d1c3). Only transparent content sections — "More than just surf",
+   "Rooftop pool", "Built on 10+", etc. — show this; every section/card with an
+   explicit background overrides it, so no other section is affected. */
+body.elementor-kit-6 {
+  background-color: var(--ss-taupe) !important;
+}
+
+/* The Rooms / packages section carries the warm taupe background. */
+.elementor-element-f5326a3 {
+  background-color: var(--ss-taupe) !important;
+}
+
+/* SECTIONS that shipped with a mint (#BEF6D1) background → reference cream.
+   These are flat, full-width sections (no border-radius). Sections behind a
+   full-bleed image are unaffected visually (the image covers the colour).
+   `!important` beats the original (non-important) mint rules. */
+.elementor-element-0987203,
+.elementor-element-7445f95,
+.elementor-element-94a7a3c,
+.elementor-element-0987203 .elementor-motion-effects-layer,
+.elementor-element-7445f95 .elementor-motion-effects-layer,
+.elementor-element-94a7a3c .elementor-motion-effects-layer {
+  background-color: var(--ss-cream) !important;
+}
+
+/* Section colour RHYTHM fix. "What's included" (580d2e2 / inner 96749d3) and the
+   "Weligama corner" location band (1092f34) shipped on the default taupe, so they
+   collided with the taupe sections beside them (Rooms→What's-included were both
+   taupe; Why-surf→Location→FAQ were three taupe in a row). Setting these two to
+   cream restores a clean alternation down the page:
+     About(cream) → Rooms+Packages(taupe) → What's-included(cream) →
+     More/Rooftop/Built(cream, separated by the island image) → Why-surf(taupe) →
+     Location(cream) → FAQ(taupe). */
+.elementor-element-580d2e2,
+.elementor-element-580d2e2 .elementor-motion-effects-layer,
+.elementor-element-96749d3,
+.elementor-element-96749d3 .elementor-motion-effects-layer,
+.elementor-element-1092f34,
+.elementor-element-1092f34 .elementor-motion-effects-layer {
+  background-color: var(--ss-cream) !important;
+}
+
+/* "Why surf with Soul Surfer?" section (the four icon boxes) — taupe #D7D2C4
+   per request, so it reads as a distinct band between the cream sections. */
+.elementor-element-72257620,
+.elementor-element-72257620 .elementor-motion-effects-layer {
+  background-color: var(--ss-taupe) !important;
+}
+
+/* The button WIDGETS 5f522f8 / 97847cd carried the mint only on their inner
+   <a class="elementor-button"> (set to espresso below). Their widget containers
+   must stay transparent — giving them a fill produced an empty coloured bar
+   beside the button. Force transparent to be safe. */
+.elementor-element-5f522f8,
+.elementor-element-97847cd {
+  background-color: transparent !important;
+}
+
+/* CARD bodies are WHITE in the reference (the rounded package/room cards).
+   The section recolour above + the global remap had tinted these rounded card
+   containers cream/sage; restore them to pure white so they read as cards
+   sitting on the taupe/cream sections — exactly like the reference. */
+.elementor-element-efee0bd,
+.elementor-element-3b62ef7,
+.elementor-element-e4926e1,
+.elementor-element-52d36c0,
+.elementor-element-02e6592,
+.elementor-element-d025734,
+.elementor-element-dbea544,
+.elementor-element-efee0bd .elementor-motion-effects-layer,
+.elementor-element-3b62ef7 .elementor-motion-effects-layer,
+.elementor-element-02e6592 .elementor-motion-effects-layer,
+.elementor-element-d025734 .elementor-motion-effects-layer,
+.elementor-element-dbea544 .elementor-motion-effects-layer {
+  background-color: var(--ss-white) !important;
+}
+
+/* Activities section — "More than just surf", "Rooftop pool & sea-view dining"
+   and "Built on 10+ years" (loop-9175). These are NOT cards; ded7b41 (text col)
+   and ef7cb06 (image col) were mistakenly painted white earlier. Repaint the
+   whole section cream (#ECE8DD) and let the columns show it through. */
+.elementor-element-fa11123,
+.elementor-element-fa11123 .elementor-motion-effects-layer {
+  background-color: var(--ss-cream) !important;
+}
+.elementor-element-ded7b41,
+.elementor-element-ef7cb06,
+.elementor-element-ded7b41 .elementor-motion-effects-layer,
+.elementor-element-ef7cb06 .elementor-motion-effects-layer {
+  background-color: transparent !important;
+}
+
+/* Buttons that shipped with a mint background → reference dark espresso
+   (the reference shows dark buttons, never mint). */
+.elementor-element-5f522f8 .elementor-button,
+.elementor-element-e819f97 .elementor-button,
+.elementor-element-97847cd .elementor-button {
+  background-color: var(--ss-espresso) !important;
+}
+/* …and their labels/icons were inheriting the green accent (near-invisible on
+   espresso, so the buttons looked blank). Force white. */
+.elementor-element-5f522f8 .elementor-button,
+.elementor-element-e819f97 .elementor-button,
+.elementor-element-97847cd .elementor-button,
+.elementor-element-5f522f8 .elementor-button .elementor-button-text,
+.elementor-element-97847cd .elementor-button .elementor-button-text {
+  color: #ffffff !important;
+}
+.elementor-element-5f522f8 .elementor-button svg,
+.elementor-element-e819f97 .elementor-button svg,
+.elementor-element-97847cd .elementor-button svg {
+  fill: #ffffff !important;
+}
+
+/* TrustIndex Google-reviews widget — its "verified by Google" badge ships a
+   TrustIndex green (#157351) and a pale mint (#D6F3E6); neither is a reference
+   colour. Bring them into the palette (sage / cream). */
+.ti-widget.ti-goog .ti-verified-by-row[data-style="1"] > .ti-inner {
+  background-color: var(--ss-sage) !important; /* was #157351 */
+}
+.ti-widget.ti-goog .ti-verified-by-row[data-style="2"] > .ti-inner {
+  background-color: var(--ss-cream) !important; /* was #D6F3E6 */
+  color: var(--ss-espresso) !important;
+}

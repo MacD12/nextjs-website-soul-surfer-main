@@ -12,6 +12,7 @@ import LanguageSwitcher from "../components/LanguageSwitcher";
 import NavGuard from "../components/NavGuard";
 import MobileNav from "../components/MobileNav";
 import RoomGallery from "../components/RoomGallery";
+import RoomCarousel from "../components/RoomCarousel";
 import EmbedFacade from "../components/EmbedFacade";
 import MarketingChrome from "../components/MarketingChrome";
 import StructuredData from "../components/StructuredData";
@@ -139,6 +140,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <NavGuard />
               <MobileNav />
               <RoomGallery />
+              <RoomCarousel />
               <EmbedFacade />
               <Scripts />
             </>

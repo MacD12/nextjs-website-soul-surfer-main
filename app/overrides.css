@@ -802,17 +802,76 @@ html {
   display: none;
 }
 
-/* Featured Rooms / Surf Packages carousels are run by Elementor's native Swiper
-   (arrows + autoplay). Just make the arrows sit above the slides and give a
-   little hover feedback — Swiper handles the rest (enabled/disabled state,
-   responsive slide widths, looping). */
-.elementor-swiper-button {
-  cursor: pointer;
-  z-index: 5;
-  transition: transform 0.2s ease;
+/* Featured Rooms (2e3cd55) / Surf Packages (ea1b7ed) carousel arrows.
+   These are driven by our own RoomCarousel controller. Elementor's original CSS
+   placed the arrows with a `.swiper ~ .elementor-swiper-button` sibling selector
+   plus a set of `--arrow-*` variables that only its (absent) JS ever populated —
+   so once the controller removed the stale `swiper` class, the arrows lost their
+   placement and dropped to the bottom-left. We position them ourselves, top-right
+   above the cards, with no dependency on the swiper class or those variables. */
+.elementor-element-2e3cd55,
+.elementor-element-ea1b7ed {
+  position: relative;
 }
-.elementor-swiper-button:hover {
-  transform: scale(1.06);
+.elementor-element-2e3cd55 .elementor-swiper-button,
+.elementor-element-ea1b7ed .elementor-swiper-button {
+  position: absolute;
+  top: -78px; /* lift into the gap beside the sub-heading, above the cards */
+  bottom: auto;
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+  border-radius: 50%;
+  /* Neutralise Elementor's base `transform: translateY(-50%)` so our top offset
+     is exact; transform is then used only for the hover/press feedback. */
+  transform: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.elementor-element-2e3cd55 .elementor-swiper-button svg,
+.elementor-element-ea1b7ed .elementor-swiper-button svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.elementor-element-2e3cd55 .elementor-swiper-button-prev,
+.elementor-element-ea1b7ed .elementor-swiper-button-prev {
+  left: auto;
+  right: 64px; /* sits just left of the next arrow */
+}
+.elementor-element-2e3cd55 .elementor-swiper-button-next,
+.elementor-element-ea1b7ed .elementor-swiper-button-next {
+  left: auto;
+  right: 0;
+}
+/* Gentle, natural hover — a soft lift + subtle shadow, no jump or spin. */
+.elementor-element-2e3cd55 .elementor-swiper-button:hover,
+.elementor-element-ea1b7ed .elementor-swiper-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(43, 39, 34, 0.16);
+}
+.elementor-element-2e3cd55 .elementor-swiper-button:active,
+.elementor-element-ea1b7ed .elementor-swiper-button:active {
+  transform: scale(0.95);
+}
+/* Tablet / phone: little headroom above the cards, so tuck the arrows into the
+   top-right corner of the carousel (clear of the per-photo ‹ › and the New tag). */
+@media (max-width: 1024px) {
+  .elementor-element-2e3cd55 .elementor-swiper-button,
+  .elementor-element-ea1b7ed .elementor-swiper-button {
+    top: 12px;
+    width: 42px;
+    height: 42px;
+  }
+  .elementor-element-2e3cd55 .elementor-swiper-button-prev,
+  .elementor-element-ea1b7ed .elementor-swiper-button-prev {
+    right: 54px;
+  }
 }
 
 /* ===== Mobile responsive fixes ===== */
